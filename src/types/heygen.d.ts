@@ -1,0 +1,1 @@
+export type Status = 'idle' | 'consent' | 'connecting' | 'connected' | 'error' | 'ended';
