@@ -1,5 +1,5 @@
 // src/hooks/useDiscovery.tsx
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import * as api from "../services/discoveryApi";
 import * as heygen from "../services/heygenApi";
 

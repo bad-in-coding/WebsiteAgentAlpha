@@ -1,5 +1,5 @@
 // src/components/DiscoveryPanel.tsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useDiscovery from "../../hooks/useDiscovery";
 
 type Props = {
