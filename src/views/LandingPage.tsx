@@ -7,6 +7,7 @@ import { FeaturesSection } from '@/components/landing/FeaturesSection';
 import { ActionDemoSection } from '@/components/landing/ActionDemoSection';
 import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
 import { PowerUserHandoff } from '@/components/landing/PowerUserHandoff';
+import { PersonalAlphaSection } from '@/components/landing/PersonalAlphaSection';
 
 export default function LandingPage() {
   return (
@@ -22,6 +23,7 @@ export default function LandingPage() {
       <ModeToggleSection />
       <FeaturesSection />
       <ActionDemoSection />
+      <PersonalAlphaSection />
       <TestimonialsSection />
       <PowerUserHandoff />
     </div>
