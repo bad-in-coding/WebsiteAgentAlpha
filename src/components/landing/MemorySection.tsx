@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 export function MemorySection() {
     return (
-        <section className="py-32 px-6 max-w-7xl mx-auto border-t border-white/5 relative z-10">
+        <section className="px-6 max-w-7xl mx-auto border-t border-white/5 relative z-10">
             <div className="flex flex-col md:grid md:grid-cols-2 gap-16 items-center">
                 {/* Left Column (The Timeline) */}
                 <motion.div

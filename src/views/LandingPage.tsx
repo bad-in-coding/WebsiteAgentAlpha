@@ -17,10 +17,10 @@ export default function LandingPage() {
       <div className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-purple-400/20 dark:bg-purple-600/10 rounded-full blur-[100px] -z-10" />
 
       <HeroSection />
+      <ModeToggleSection />
       <MemorySection />
       <HybridWorkflowsSection />
       <OrbitalEcosystem />
-      <ModeToggleSection />
       <FeaturesSection />
       <ActionDemoSection />
       <PersonalAlphaSection />
