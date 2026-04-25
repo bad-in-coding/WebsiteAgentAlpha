@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-    Mail, FileText, Database, Cloud, Server, PieChart, Hash,
-    Table, Users, Briefcase, Search, Phone, Globe, Plus, Book, Keyboard, Network, Settings, Zap
+    Mail, FileText, Database, Cloud, Server, Hash,
+    Table, Users, Briefcase, Globe, Book, Zap
 } from 'lucide-react';
 
 const ring1 = [

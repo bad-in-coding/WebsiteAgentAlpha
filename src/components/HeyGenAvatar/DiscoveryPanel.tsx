@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import useDiscovery from "../../hooks/useDiscovery";
 
 type Props = {
-  heygenSessionId?: string | null; // pass the active HeyGen session id to speak questions
+  // Props can be extended in the future
 };
 
-export default function DiscoveryPanel({ heygenSessionId }: Props) {
+export default function DiscoveryPanel({}: Props) {
   const {
     sessionId,
     currentQuestion,
@@ -19,7 +19,7 @@ export default function DiscoveryPanel({ heygenSessionId }: Props) {
     answerAndNext,
     skipQuestion,
     complete,
-  } = useDiscovery(heygenSessionId);
+  } = useDiscovery();
 
   const [value, setValue] = useState("");
 

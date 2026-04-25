@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 type Props = {
   mediaStreamRef: React.RefObject<HTMLVideoElement | null>;
@@ -50,30 +51,46 @@ export default function VideoPanel({ mediaStreamRef, status, onStart, onEnd }: P
       {/* Center Controls (Start) */}
       {!isConnected && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-30">
-          <button
-            onClick={onStart}
-            disabled={isConnecting}
-            className={`group relative px-8 py-4 rounded-full font-bold text-lg shadow-2xl shadow-blue-900/20 transition-all transform hover:scale-105 active:scale-95 ${isConnecting
-                ? 'bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-700'
-                : 'bg-white text-slate-900 hover:bg-slate-50 border border-white'
-              }`}
-          >
-            {isConnecting ? (
-              <span className="flex items-center gap-3">
-                <svg className="animate-spin h-5 w-5 text-blue-500" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-                <span className="text-sm">Connecting Securely...</span>
-              </span>
-            ) : (
-              <span className="flex items-center gap-2">
-                <span>Start Discovery</span>
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              </span>
+          <div className="relative">
+            {/* Ambient pulse behind the button */}
+            {!isConnecting && (
+              <motion.div 
+                animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0.1, 0.3] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -inset-4 bg-purple-500 rounded-full blur-xl pointer-events-none"
+              />
             )}
-          </button>
-          {!isConnecting && <p className="mt-4 text-xs text-slate-400 font-medium tracking-wide uppercase opacity-60">AI Powered Interviewer</p>}
+            <motion.button
+              whileHover={isConnecting ? {} : { scale: 1.05 }}
+              whileTap={isConnecting ? {} : { scale: 0.95 }}
+              onClick={onStart}
+              disabled={isConnecting}
+              className={`group relative px-8 py-4 rounded-full font-bold text-lg shadow-2xl shadow-purple-900/40 transition-all ${isConnecting
+                  ? 'bg-black/50 text-slate-400 cursor-not-allowed border border-white/10 backdrop-blur-md'
+                  : 'bg-white text-slate-900 border border-white overflow-hidden'
+                }`}
+            >
+              {/* Shimmer effect for active button */}
+              {!isConnecting && (
+                <div className="absolute inset-0 -translate-x-full group-hover:animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none" />
+              )}
+              {isConnecting ? (
+                <span className="flex items-center gap-3">
+                  <svg className="animate-spin h-5 w-5 text-purple-400" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  <span className="text-sm">Initializing Synapse...</span>
+                </span>
+              ) : (
+                <span className="flex items-center gap-2">
+                  <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Initialize Alpha</span>
+                  <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </span>
+              )}
+            </motion.button>
+          </div>
+          {!isConnecting && <p className="mt-6 text-xs text-slate-400 font-medium tracking-widest uppercase opacity-70">Interactive Voice Session</p>}
         </div>
       )}
 

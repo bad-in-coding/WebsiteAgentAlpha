@@ -1,7 +1,6 @@
 // src/hooks/useDiscovery.tsx
 import { useCallback, useState } from "react";
 import * as api from "../services/discoveryApi";
-import * as heygen from "../services/heygenApi";
 
 export type Question = {
   id: string;
@@ -10,7 +9,7 @@ export type Question = {
   choices?: string[];
 };
 
-export default function useDiscovery(heygenSessionId?: string | null) {
+export default function useDiscovery() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [finished, setFinished] = useState(false);
@@ -30,13 +29,12 @@ export default function useDiscovery(heygenSessionId?: string | null) {
       const q = startResp.first_question;
       setCurrentQuestion(q ?? null);
       setProgress({ index: 1, total: 12 }); // approximate total (could be derived from question list if exposed)
-      // paraphrase & speak
-      if (q && heygenSessionId) {
+      // paraphrase question (speak handled externally by avatar if needed)
+      if (q) {
         try {
-          const speakText = await api.paraphraseQuestion(q.text, { answers });
-          await heygen.speak(heygenSessionId, speakText);
+          await api.paraphraseQuestion(q.text, { answers });
         } catch (e) {
-          console.warn("speak/paraphrase error", e);
+          console.warn("paraphrase error", e);
         }
       }
     } catch (e: any) {
@@ -44,7 +42,7 @@ export default function useDiscovery(heygenSessionId?: string | null) {
     } finally {
       setLoading(false);
     }
-  }, [heygenSessionId]);
+  }, []);
 
   // Load next question (poll style)
   const pollNextQuestion = useCallback(
@@ -82,12 +80,11 @@ export default function useDiscovery(heygenSessionId?: string | null) {
 
         // If new question arrived, paraphrase & speak it
         const nextQ = resp.next_question;
-        if (nextQ && heygenSessionId) {
+        if (nextQ) {
           try {
-            const speakText = await api.paraphraseQuestion(nextQ.text, { answers: { ...answers, [questionId]: answerValue } });
-            await heygen.speak(heygenSessionId, speakText);
+            await api.paraphraseQuestion(nextQ.text, { answers: { ...answers, [questionId]: answerValue } });
           } catch (e) {
-            console.warn("paraphrase/speak failed", e);
+            console.warn("paraphrase failed", e);
           }
         }
       } catch (e: any) {
@@ -96,7 +93,7 @@ export default function useDiscovery(heygenSessionId?: string | null) {
         setLoading(false);
       }
     },
-    [sessionId, heygenSessionId, answers]
+    [sessionId, answers]
   );
 
   // Complete synthesis
@@ -109,12 +106,8 @@ export default function useDiscovery(heygenSessionId?: string | null) {
         const comp = await api.discoverComplete(s);
         setSummary(comp);
         // optionally instruct avatar to speak a 1-line summary
-        if (heygenSessionId && comp.summary) {
-          try {
-            await heygen.speak(heygenSessionId, comp.summary);
-          } catch (e) {
-            console.warn("speak summary failed", e);
-          }
+        if (comp.summary) {
+          console.log('[Discovery] Summary:', comp.summary);
         }
       } catch (e: any) {
         setError(String(e));
@@ -122,7 +115,7 @@ export default function useDiscovery(heygenSessionId?: string | null) {
         setLoading(false);
       }
     },
-    [sessionId, heygenSessionId]
+    [sessionId]
   );
 
   // helper: skip question
